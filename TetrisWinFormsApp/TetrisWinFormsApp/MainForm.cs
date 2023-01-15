@@ -12,8 +12,8 @@ namespace TetrisWinFormsApp
         private int _cellSize;
         private int _cellsWidthCount;
         private int _cellsHeightCount;
-        private PictureBox[,] block;
-        private PictureBox[,] blocksOnMap;
+        private PictureBox[,] _block;
+        private PictureBox[,] _blocksOnMap;
         private Random random = new Random();
         Timer movingTimer = new Timer();
         Timer gameTimer = new Timer();
@@ -51,7 +51,7 @@ namespace TetrisWinFormsApp
         {
             nameLabel.Text = _user.Name;
             scoreLabel.Text = "0";
-            blocksOnMap = new PictureBox[_cellsHeightCount, _cellsWidthCount];
+            _blocksOnMap = new PictureBox[_cellsHeightCount, _cellsWidthCount];
             _nextBlockType = (BlockType)random.Next(7);
             gameTimer.Start();
         }
@@ -70,11 +70,11 @@ namespace TetrisWinFormsApp
             var _centerY = _centerBlock.Location.Y;
             var downSideLeft = _blockLeftBorder.Location.Y / _cellSize;
             var downSideRight = _blockRightBorder.Location.Y / _cellSize;
-            if (_centerY >= 0  && _centerX > 0 && blocksOnMap[downSideLeft, _centerX / _cellSize - 1] != null || _centerX == LeftBorder())
+            if (_centerY >= 0  && _centerX > 0 && _blocksOnMap[downSideLeft, _centerX / _cellSize - 1] != null || _centerX == LeftBorder())
             {
                 _centerX += _cellSize;
             }
-            else if (_centerY >= 0 && _centerX / _cellSize < RightBorder() && blocksOnMap[downSideRight, _centerX / _cellSize + 1] != null || _centerX / _cellSize == RightBorder())
+            else if (_centerY >= 0 && _centerX / _cellSize < RightBorder() && _blocksOnMap[downSideRight, _centerX / _cellSize + 1] != null || _centerX / _cellSize == RightBorder())
             {
                 _centerX -= _cellSize;
             }
@@ -339,7 +339,7 @@ namespace TetrisWinFormsApp
 
             if (_centerBlock.Location.Y / _cellSize + 1 <= BottomBorder() && _blockLeftBorder.Location.X >= LeftBorder() && _blockRightBorder.Location.X / _cellSize <= RightBorder())
             {
-                Array.Copy(checkingBlock, block, checkingBlock.Length);
+                Array.Copy(checkingBlock, _block, checkingBlock.Length);
             }
         }
         private void GameTimer_Tick(object? sender, EventArgs e)
@@ -366,12 +366,12 @@ namespace TetrisWinFormsApp
                         break;
                     case BlockType.LBlockR:
                         {
-                            nextBlockTypePictureBox.Image = Properties.Resources.LLeft;
+                            nextBlockTypePictureBox.Image = Properties.Resources.LRight;
                         }
                         break;
                     case BlockType.LBlockL:
                         {
-                            nextBlockTypePictureBox.Image = Properties.Resources.LRight;
+                            nextBlockTypePictureBox.Image = Properties.Resources.LLeft;
                         }
                         break;
                     case BlockType.ZBlockL:
@@ -402,7 +402,7 @@ namespace TetrisWinFormsApp
         private void GetBlock(BlockType blockType)
         {
             _currentBlockType = blockType;
-            block = new PictureBox[_blockMapSize, _blockMapSize];
+            _block = new PictureBox[_blockMapSize, _blockMapSize];
             do
             {
                 var randomX = random.Next(1, _cellsWidthCount - 1) * _cellSize;
@@ -411,99 +411,99 @@ namespace TetrisWinFormsApp
                     case BlockType.GBlock:
                         {
                             _blockColor = Color.Red;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize, _blockColor);
-                            block[1, 0] = CreateOnePieceOfBlock(block[1, 1].Location.X - _cellSize, block[1, 1].Location.Y, _blockColor);
-                            block[1, 2] = CreateOnePieceOfBlock(block[1, 1].Location.X + _cellSize, block[1, 1].Location.Y, _blockColor);
-                            _blockHead = block[1, 0];
-                            _blockLeftBorder = block[1, 0];
-                            _blockRightBorder = block[1, 2];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize, _blockColor);
+                            _block[1, 0] = CreateOnePieceOfBlock(_block[1, 1].Location.X - _cellSize, _block[1, 1].Location.Y, _blockColor);
+                            _block[1, 2] = CreateOnePieceOfBlock(_block[1, 1].Location.X + _cellSize, _block[1, 1].Location.Y, _blockColor);
+                            _blockHead = _block[1, 0];
+                            _blockLeftBorder = _block[1, 0];
+                            _blockRightBorder = _block[1, 2];
                         }
                         break;
                     case BlockType.VBlock:
                         {
                             _blockColor = Color.Red;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
-                            block[0, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y - _cellSize, _blockColor);
-                            block[2, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y + _cellSize, _blockColor);
-                            _blockHead = block[0, 1];
-                            _blockLeftBorder = block[2, 1];
-                            _blockRightBorder = block[2, 1];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
+                            _block[0, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y - _cellSize, _blockColor);
+                            _block[2, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y + _cellSize, _blockColor);
+                            _blockHead = _block[0, 1];
+                            _blockLeftBorder = _block[2, 1];
+                            _blockRightBorder = _block[2, 1];
                         }
                         break;
                     case BlockType.LBlockR:
                         {
                             _blockColor = Color.Yellow;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
-                            block[0, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y - _cellSize, _blockColor);
-                            block[2, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y + _cellSize, _blockColor);
-                            block[2, 2] = CreateOnePieceOfBlock(block[2, 1].Location.X + _cellSize, block[2, 1].Location.Y, _blockColor);
-                            _blockHead = block[0, 1];
-                            _blockLeftBorder = block[2, 1];
-                            _blockRightBorder = block[2, 2];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
+                            _block[0, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y - _cellSize, _blockColor);
+                            _block[2, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y + _cellSize, _blockColor);
+                            _block[2, 2] = CreateOnePieceOfBlock(_block[2, 1].Location.X + _cellSize, _block[2, 1].Location.Y, _blockColor);
+                            _blockHead = _block[0, 1];
+                            _blockLeftBorder = _block[2, 1];
+                            _blockRightBorder = _block[2, 2];
                         }
                         break;
                     case BlockType.LBlockL:
                         {
                             _blockColor = Color.Yellow;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
-                            block[0, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y - _cellSize, _blockColor);
-                            block[2, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y + _cellSize, _blockColor);
-                            block[2, 0] = CreateOnePieceOfBlock(block[2, 1].Location.X - _cellSize, block[2, 1].Location.Y, _blockColor);
-                            _blockHead = block[0, 1];
-                            _blockLeftBorder = block[2, 1];
-                            _blockRightBorder = block[2, 0];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
+                            _block[0, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y - _cellSize, _blockColor);
+                            _block[2, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y + _cellSize, _blockColor);
+                            _block[2, 0] = CreateOnePieceOfBlock(_block[2, 1].Location.X - _cellSize, _block[2, 1].Location.Y, _blockColor);
+                            _blockHead = _block[0, 1];
+                            _blockLeftBorder = _block[2, 1];
+                            _blockRightBorder = _block[2, 0];
                         }
                         break;
                     case BlockType.TBlock:
                         {
                             _blockColor = Color.Violet;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
-                            block[1, 0] = CreateOnePieceOfBlock(block[1, 1].Location.X - _cellSize, block[1, 1].Location.Y, _blockColor);
-                            block[1, 2] = CreateOnePieceOfBlock(block[1, 1].Location.X + _cellSize, block[1, 1].Location.Y, _blockColor);
-                            block[2, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y + _cellSize, _blockColor);
-                            _blockHead = block[1, 0];
-                            _blockLeftBorder = block[1, 0];
-                            _blockRightBorder = block[1, 2];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
+                            _block[1, 0] = CreateOnePieceOfBlock(_block[1, 1].Location.X - _cellSize, _block[1, 1].Location.Y, _blockColor);
+                            _block[1, 2] = CreateOnePieceOfBlock(_block[1, 1].Location.X + _cellSize, _block[1, 1].Location.Y, _blockColor);
+                            _block[2, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y + _cellSize, _blockColor);
+                            _blockHead = _block[1, 0];
+                            _blockLeftBorder = _block[1, 0];
+                            _blockRightBorder = _block[1, 2];
                         }
                         break;
                     case BlockType.Cube:
                         {
                             _blockColor = Color.Green;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
-                            block[1, 0] = CreateOnePieceOfBlock(block[1, 1].Location.X - _cellSize, block[1, 1].Location.Y, _blockColor);
-                            block[2, 0] = CreateOnePieceOfBlock(block[1, 0].Location.X, block[1, 0].Location.Y + _cellSize, _blockColor);
-                            block[2, 1] = CreateOnePieceOfBlock(block[2, 0].Location.X + _cellSize, block[2, 0].Location.Y, _blockColor);
-                            _blockHead = block[1, 0];
-                            _blockLeftBorder = block[2, 0];
-                            _blockRightBorder = block[2, 1];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
+                            _block[1, 0] = CreateOnePieceOfBlock(_block[1, 1].Location.X - _cellSize, _block[1, 1].Location.Y, _blockColor);
+                            _block[2, 0] = CreateOnePieceOfBlock(_block[1, 0].Location.X, _block[1, 0].Location.Y + _cellSize, _blockColor);
+                            _block[2, 1] = CreateOnePieceOfBlock(_block[2, 0].Location.X + _cellSize, _block[2, 0].Location.Y, _blockColor);
+                            _blockHead = _block[1, 0];
+                            _blockLeftBorder = _block[2, 0];
+                            _blockRightBorder = _block[2, 1];
                         }
                         break;
                     case BlockType.ZBlockL:
                         {
                             _blockColor = Color.Blue;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
-                            block[1, 0] = CreateOnePieceOfBlock(block[1, 1].Location.X - _cellSize, block[1, 1].Location.Y, _blockColor);
-                            block[2, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y + _cellSize, _blockColor);
-                            block[2, 2] = CreateOnePieceOfBlock(block[2, 1].Location.X + _cellSize, block[2, 1].Location.Y, _blockColor);
-                            _blockHead = block[1, 0];
-                            _blockLeftBorder = block[1, 0];
-                            _blockRightBorder = block[2, 2];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
+                            _block[1, 0] = CreateOnePieceOfBlock(_block[1, 1].Location.X - _cellSize, _block[1, 1].Location.Y, _blockColor);
+                            _block[2, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y + _cellSize, _blockColor);
+                            _block[2, 2] = CreateOnePieceOfBlock(_block[2, 1].Location.X + _cellSize, _block[2, 1].Location.Y, _blockColor);
+                            _blockHead = _block[1, 0];
+                            _blockLeftBorder = _block[1, 0];
+                            _blockRightBorder = _block[2, 2];
                         }
                         break;
                     case BlockType.ZBlockR:
                         {
                             _blockColor = Color.Blue;
-                            block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
-                            block[1, 2] = CreateOnePieceOfBlock(block[1, 1].Location.X + _cellSize, block[1, 1].Location.Y, _blockColor);
-                            block[2, 1] = CreateOnePieceOfBlock(block[1, 1].Location.X, block[1, 1].Location.Y + _cellSize, _blockColor);
-                            block[2, 0] = CreateOnePieceOfBlock(block[2, 1].Location.X - _cellSize, block[2, 1].Location.Y, _blockColor);
-                            _blockHead = block[1, 1];
-                            _blockLeftBorder = block[2, 0];
-                            _blockRightBorder = block[1, 2];
+                            _block[1, 1] = CreateOnePieceOfBlock(randomX, -_cellSize * 2, _blockColor);
+                            _block[1, 2] = CreateOnePieceOfBlock(_block[1, 1].Location.X + _cellSize, _block[1, 1].Location.Y, _blockColor);
+                            _block[2, 1] = CreateOnePieceOfBlock(_block[1, 1].Location.X, _block[1, 1].Location.Y + _cellSize, _blockColor);
+                            _block[2, 0] = CreateOnePieceOfBlock(_block[2, 1].Location.X - _cellSize, _block[2, 1].Location.Y, _blockColor);
+                            _blockHead = _block[1, 1];
+                            _blockLeftBorder = _block[2, 0];
+                            _blockRightBorder = _block[1, 2];
                         }
                         break;
                 }
-                _centerBlock = block[1, 1];
+                _centerBlock = _block[1, 1];
                 _blockIndex = 0;                
 
                 if (!IsExistingFreePlaces())
@@ -515,13 +515,12 @@ namespace TetrisWinFormsApp
             ShowBlock();
             _isNextBlockMoving = true;
         }
-
         private bool IsExistingFreePlaces()
         {
             var freePlaces = 0;
             for (int i = 0; i < _cellsWidthCount; i++)
             {
-                if (blocksOnMap[0, i] == null)
+                if (_blocksOnMap[0, i] == null)
                 {
                     freePlaces++;
                     if (freePlaces == _blockMapSize)
@@ -537,11 +536,10 @@ namespace TetrisWinFormsApp
             }
             return false;
         }
-
         private bool IsFindingFreePlaces()
         {
             var columnLocation = _centerBlock.Location.X / _cellSize;
-            if (blocksOnMap[0, columnLocation - 1] == null && blocksOnMap[0, columnLocation + 1] == null && blocksOnMap[0, columnLocation] == null)
+            if (_blocksOnMap[0, columnLocation - 1] == null && _blocksOnMap[0, columnLocation + 1] == null && _blocksOnMap[0, columnLocation] == null)
             {
                 return true;
             }
@@ -568,7 +566,6 @@ namespace TetrisWinFormsApp
                 Close();
             }
         }
-
         private void MoveBlock()
         {
             ClearBlock();
@@ -576,15 +573,14 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _blockMapSize; j++)
                 {
-                    if (block[i, j] != null)
+                    if (_block[i, j] != null)
                     {
-                        block[i, j].Location = new Point(block[i, j].Location.X, block[i, j].Location.Y + _cellSize);
+                        _block[i, j].Location = new Point(_block[i, j].Location.X, _block[i, j].Location.Y + _cellSize);
                     }
                 }
             }
             ShowBlock();
         }
-
         private void MovingTimer_Tick(object? sender, EventArgs e)
         {
             MoveBlock();
@@ -597,11 +593,11 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _blockMapSize; j++)
                 {
-                    if (block[i, j] != null)
+                    if (_block[i, j] != null)
                     {
-                        var rowLocation = block[i, j].Location.Y / _cellSize;
-                        var columLocation = block[i, j].Location.X / _cellSize;
-                        if (rowLocation == BottomBorder() || rowLocation >= 0 && blocksOnMap[rowLocation + 1, columLocation] != null)
+                        var rowLocation = _block[i, j].Location.Y / _cellSize;
+                        var columLocation = _block[i, j].Location.X / _cellSize;
+                        if (rowLocation == BottomBorder() || rowLocation >= 0 && _blocksOnMap[rowLocation + 1, columLocation] != null)
                         {
                             if (_blockHead.Location.Y < 0)
                             {
@@ -625,7 +621,7 @@ namespace TetrisWinFormsApp
                 var lineIsFulled = true;
                 for (int j = LeftBorder(); j <= RightBorder(); j++)
                 {
-                    if (blocksOnMap[i, j] == null)
+                    if (_blocksOnMap[i, j] == null)
                     {
                         lineIsFulled = false;
                         break;
@@ -637,8 +633,8 @@ namespace TetrisWinFormsApp
                     scoreLabel.Text = (Convert.ToInt32(scoreLabel.Text) + 1).ToString();
                     for (int j = 0; j < _cellsWidthCount; j++)
                     {
-                        Controls.Remove(blocksOnMap[i, j]);
-                        blocksOnMap[i, j] = null;                        
+                        Controls.Remove(_blocksOnMap[i, j]);
+                        _blocksOnMap[i, j] = null;                        
                     }
                 }
                 else if (!lineIsFulled && countLineForCleaning > 0)
@@ -646,15 +642,15 @@ namespace TetrisWinFormsApp
                     int q = i + countLineForCleaning;
                     for (int j = 0; j < _cellsWidthCount; j++)
                     {
-                        if (blocksOnMap[i, j] != null)
+                        if (_blocksOnMap[i, j] != null)
                         {
-                            Controls.Remove(blocksOnMap[i, j]);
-                            int newX = blocksOnMap[i, j].Location.X;
-                            int newY = blocksOnMap[i, j].Location.Y + _cellSize * countLineForCleaning;
-                            var color = blocksOnMap[i, j].BackColor;
-                            blocksOnMap[i, j] = null;
-                            blocksOnMap[q, j] = CreateOnePieceOfBlock(newX, newY, color);
-                            Controls.Add(blocksOnMap[q, j]);
+                            Controls.Remove(_blocksOnMap[i, j]);
+                            int newX = _blocksOnMap[i, j].Location.X;
+                            int newY = _blocksOnMap[i, j].Location.Y + _cellSize * countLineForCleaning;
+                            var color = _blocksOnMap[i, j].BackColor;
+                            _blocksOnMap[i, j] = null;
+                            _blocksOnMap[q, j] = CreateOnePieceOfBlock(newX, newY, color);
+                            Controls.Add(_blocksOnMap[q, j]);
                         }
                     }
                 }
@@ -666,12 +662,12 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _blockMapSize; j++)
                 {
-                    if (block[i, j] != null)
+                    if (_block[i, j] != null)
                     {
-                        var rowLocation = block[i, j].Location.Y / _cellSize;
-                        var columLocation = block[i, j].Location.X / _cellSize;
-                        blocksOnMap[rowLocation, columLocation] = CreateOnePieceOfBlock(block[i, j].Location.X, block[i, j].Location.Y, _blockColor);
-                        Controls.Add(blocksOnMap[rowLocation, columLocation]);
+                        var rowLocation = _block[i, j].Location.Y / _cellSize;
+                        var columLocation = _block[i, j].Location.X / _cellSize;
+                        _blocksOnMap[rowLocation, columLocation] = CreateOnePieceOfBlock(_block[i, j].Location.X, _block[i, j].Location.Y, _blockColor);
+                        Controls.Add(_blocksOnMap[rowLocation, columLocation]);
                     }
                 }
             }
@@ -682,10 +678,10 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _cellsWidthCount; j++)
                 {
-                    if (blocksOnMap[i, j] != null)
+                    if (_blocksOnMap[i, j] != null)
                     {
-                        Controls.Remove(blocksOnMap[i, j]);
-                        blocksOnMap[i, j] = null;
+                        Controls.Remove(_blocksOnMap[i, j]);
+                        _blocksOnMap[i, j] = null;
                     }
                 }
             }
@@ -696,9 +692,9 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _blockMapSize; j++)
                 {
-                    if (block[i, j] != null)
+                    if (_block[i, j] != null)
                     {
-                        Controls.Add(block[i, j]);
+                        Controls.Add(_block[i, j]);
                     }
                 }
             }
@@ -709,9 +705,9 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _blockMapSize; j++)
                 {
-                    if (block[i, j] != null)
+                    if (_block[i, j] != null)
                     {
-                        Controls.Remove(block[i, j]);
+                        Controls.Remove(_block[i, j]);
                     }
                 }
             }
@@ -751,7 +747,6 @@ namespace TetrisWinFormsApp
         {
             return _cellsHeightCount - 1;
         }
-
         private bool IsClearLeftOnBlock()
         {
             if(_blockLeftBorder.Location.X <= LeftBorder())
@@ -762,11 +757,11 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _blockMapSize; j++)
                 {
-                    if (block[i, j] != null && block[i, j].Location.Y >= 0 && block[i, j].Location.X > 0)
+                    if (_block[i, j] != null && _block[i, j].Location.Y >= 0 && _block[i, j].Location.X > 0)
                     {
-                        var columnLoction = block[i, j].Location.X / _cellSize;
-                        var rowLocation = block[i, j].Location.Y / _cellSize;
-                        if (blocksOnMap[rowLocation, columnLoction - 1] != null)
+                        var columnLoction = _block[i, j].Location.X / _cellSize;
+                        var rowLocation = _block[i, j].Location.Y / _cellSize;
+                        if (_blocksOnMap[rowLocation, columnLoction - 1] != null)
                         {
                             return false;
                         }
@@ -785,11 +780,11 @@ namespace TetrisWinFormsApp
             {
                 for (int j = 0; j < _blockMapSize; j++)
                 {
-                    if (block[i, j] != null && block[i, j].Location.Y >= 0 && block[i, j].Location.X < RightBorder() * _cellSize)
+                    if (_block[i, j] != null && _block[i, j].Location.Y >= 0 && _block[i, j].Location.X < RightBorder() * _cellSize)
                     {
-                        var locationX = block[i, j].Location.X / _cellSize;
-                        var locationY = block[i, j].Location.Y / _cellSize;
-                        if (blocksOnMap[locationY, locationX + 1] != null)
+                        var locationX = _block[i, j].Location.X / _cellSize;
+                        var locationY = _block[i, j].Location.Y / _cellSize;
+                        if (_blocksOnMap[locationY, locationX + 1] != null)
                         {                            
                             return false;
                         }
@@ -810,9 +805,9 @@ namespace TetrisWinFormsApp
                         {
                             for (int j = 0; j < _blockMapSize; j++)
                             {
-                                if (block[i, j] != null)
+                                if (_block[i, j] != null)
                                 {
-                                    block[i, j].Location = new Point(block[i, j].Location.X - _cellSize, block[i, j].Location.Y);
+                                    _block[i, j].Location = new Point(_block[i, j].Location.X - _cellSize, _block[i, j].Location.Y);
                                 }
                             }
                         }
@@ -826,9 +821,9 @@ namespace TetrisWinFormsApp
                         {
                             for (int j = 0; j < _blockMapSize; j++)
                             {
-                                if (block[i, j] != null)
+                                if (_block[i, j] != null)
                                 {
-                                    block[i, j].Location = new Point(block[i, j].Location.X + _cellSize, block[i, j].Location.Y);
+                                    _block[i, j].Location = new Point(_block[i, j].Location.X + _cellSize, _block[i, j].Location.Y);
                                 }
                             }
                         }
@@ -843,7 +838,6 @@ namespace TetrisWinFormsApp
                     break;
             }
         }
-
         private async void CheckForBlockFallen()
         {
             if (IsBlockFallen())
@@ -857,7 +851,6 @@ namespace TetrisWinFormsApp
                 gameTimer.Start();
             }
         }
-
         private void Rotate()
         {
             ClearBlock();
@@ -868,13 +861,12 @@ namespace TetrisWinFormsApp
             }
             GetRotatedBlock(_blockIndex, _currentBlockType);
         }
-
         private void MainForm_FormClosed(object sender, FormClosedEventArgs e)
         {
             movingTimer.Stop();
             gameTimer.Stop();
-            Array.Clear(block);
-            Array.Clear(blocksOnMap);
+            Array.Clear(_block);
+            Array.Clear(_blocksOnMap);
         }
     }
 }

@@ -15,47 +15,54 @@ namespace TetrisWinFormsApp
         private int _tableWidth;
         private int _tableHeight;
         private List<User> playersResults;
+        private ResultsStorage results;
         public PlayersTableForm()
         {
 
             InitializeComponent();
             _tableWidth = 700;
-            _tableHeight = 700;
-            ClientSize = new Size(_tableWidth, _tableHeight);
+            _tableHeight = 700;            
         }
         private void InitTable()
         {
+            ClientSize = new Size(_tableWidth, _tableHeight);
             ScoreTable.Size = new Size(_tableWidth, _tableHeight);
             DataGridViewTextBoxColumn number = new DataGridViewTextBoxColumn();
             number.HeaderText = "№";
             number.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             number.ReadOnly = true;
+            number.SortMode= DataGridViewColumnSortMode.NotSortable;
             DataGridViewTextBoxColumn nameColumn = new DataGridViewTextBoxColumn();
             nameColumn.HeaderText = "Имя";
             nameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             nameColumn.ReadOnly = true;
+            nameColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
             DataGridViewTextBoxColumn secondNameColumn = new DataGridViewTextBoxColumn();
             secondNameColumn.HeaderText = "Фамилия";
             secondNameColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             secondNameColumn.ReadOnly = true;
+            secondNameColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
             DataGridViewTextBoxColumn ageColumn = new DataGridViewTextBoxColumn();
             ageColumn.HeaderText = "Возраст";
             ageColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             ageColumn.ReadOnly = true;
+            ageColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
             DataGridViewTextBoxColumn scoreColumn = new DataGridViewTextBoxColumn();
             scoreColumn.HeaderText = "Количество очков";
             scoreColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             scoreColumn.ReadOnly = true;
+            scoreColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
             DataGridViewTextBoxColumn countFallenBlocksColumn = new DataGridViewTextBoxColumn();
             countFallenBlocksColumn.HeaderText = "Количество упавших фигур";
             countFallenBlocksColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill;
             countFallenBlocksColumn.ReadOnly = true;
+            countFallenBlocksColumn.SortMode = DataGridViewColumnSortMode.NotSortable;
 
             ScoreTable.Columns.AddRange(number, nameColumn, secondNameColumn, ageColumn, scoreColumn, countFallenBlocksColumn);
 
-            var results = new ResultsStorage();
+            results = new ResultsStorage();
             playersResults = results.GetUsersResults().OrderBy(x => x.Score).ToList();
-            var num = 0;
+            var num = 1;
             
             foreach(var user in playersResults)
             {
@@ -81,7 +88,15 @@ namespace TetrisWinFormsApp
 
         private void PlayersTableForm_Load(object sender, EventArgs e)
         {
+            InitTable();
+        }
 
+        private void clearButton_Click(object sender, EventArgs e)
+        {
+            playersResults.Clear();
+            results.Save(playersResults);
+            ScoreTable.Rows.Clear();
+            MessageBox.Show("Таблица очищена!", "Информация", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }

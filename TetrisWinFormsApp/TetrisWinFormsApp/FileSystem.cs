@@ -8,7 +8,7 @@ namespace TetrisWinFormsApp
 {
     public  static class FileSystem
     {
-        public static void SaveInformation(this string filePath, string information)
+        public static void SaveInformation(this string information, string filePath)
         {
             using (StreamWriter sw = new StreamWriter(filePath, false, System.Text.Encoding.Default))
             {

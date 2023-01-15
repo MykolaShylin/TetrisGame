@@ -28,7 +28,7 @@ namespace TetrisWinFormsApp
             return userResults;
         }
 
-        private void Save(List<User> usersResults)
+        public void Save(List<User> usersResults)
         {
             var JsonData = JsonConvert.SerializeObject(usersResults);
             JsonData.SaveInformation(FilePath);

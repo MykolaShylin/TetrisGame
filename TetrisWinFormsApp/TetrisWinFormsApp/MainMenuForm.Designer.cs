@@ -37,6 +37,7 @@
             this.toolStripTextBox1 = new System.Windows.Forms.ToolStripTextBox();
             this.startButton = new System.Windows.Forms.Button();
             this.ExitButton = new System.Windows.Forms.Button();
+            this.таблицаИгроковToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -63,7 +64,7 @@
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(129, 28);
+            this.menuStrip1.Size = new System.Drawing.Size(279, 28);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -71,7 +72,8 @@
             // 
             this.возможностиToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.правилаToolStripMenuItem,
-            this.обАвтореToolStripMenuItem});
+            this.обАвтореToolStripMenuItem,
+            this.таблицаИгроковToolStripMenuItem});
             this.возможностиToolStripMenuItem.Name = "возможностиToolStripMenuItem";
             this.возможностиToolStripMenuItem.Size = new System.Drawing.Size(116, 24);
             this.возможностиToolStripMenuItem.Text = "Информация";
@@ -79,14 +81,14 @@
             // правилаToolStripMenuItem
             // 
             this.правилаToolStripMenuItem.Name = "правилаToolStripMenuItem";
-            this.правилаToolStripMenuItem.Size = new System.Drawing.Size(164, 26);
+            this.правилаToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.правилаToolStripMenuItem.Text = "Правила";
             this.правилаToolStripMenuItem.Click += new System.EventHandler(this.правилаToolStripMenuItem_Click);
             // 
             // обАвтореToolStripMenuItem
             // 
             this.обАвтореToolStripMenuItem.Name = "обАвтореToolStripMenuItem";
-            this.обАвтореToolStripMenuItem.Size = new System.Drawing.Size(164, 26);
+            this.обАвтореToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
             this.обАвтореToolStripMenuItem.Text = "Об авторе";
             this.обАвтореToolStripMenuItem.Click += new System.EventHandler(this.обАвтореToolStripMenuItem_Click);
             // 
@@ -125,6 +127,13 @@
             this.ExitButton.UseVisualStyleBackColor = false;
             this.ExitButton.Click += new System.EventHandler(this.ExitButton_Click);
             // 
+            // таблицаИгроковToolStripMenuItem
+            // 
+            this.таблицаИгроковToolStripMenuItem.Name = "таблицаИгроковToolStripMenuItem";
+            this.таблицаИгроковToolStripMenuItem.Size = new System.Drawing.Size(224, 26);
+            this.таблицаИгроковToolStripMenuItem.Text = "Таблица игроков";
+            this.таблицаИгроковToolStripMenuItem.Click += new System.EventHandler(this.таблицаИгроковToolStripMenuItem_Click);
+            // 
             // MainMenuForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -161,5 +170,6 @@
         private Button ExitButton;
         private ToolStripTextBox toolStripTextBox2;
         public Button startButton;
+        private ToolStripMenuItem таблицаИгроковToolStripMenuItem;
     }
 }

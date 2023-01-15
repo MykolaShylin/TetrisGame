@@ -38,5 +38,11 @@ namespace TetrisWinFormsApp
             var registration = new RegistrationForm();
             registration.ShowDialog();
         }
+
+        private void таблицаИгроковToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var scoreLabel = new PlayersTableForm();
+            scoreLabel.ShowDialog();
+        }
     }
 }
